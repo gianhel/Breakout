@@ -9,6 +9,9 @@
 #include "UI.h"
 
 
+class PowerupManager;
+
+class UI;
 
 class GameManager {
 public:
@@ -19,6 +22,7 @@ public:
     void render();
     void levelComplete();
     void powerupEffect(POWERUPS pu, float t);
+    void spawnMultiballs();
 
     Paddle* getPaddle() const;
     BrickManager* getBrickManager() const;
@@ -34,6 +38,8 @@ private:
     float _time;
     float _timeLastPowerupSpawned;
     bool _levelComplete;
+    bool _multiballsActive;
+    sf::Clock _multiballTimer;
     std::pair<POWERUPS, float> _powerupInEffect;
 
     sf::Font _font;
@@ -41,7 +47,7 @@ private:
 
     sf::RenderWindow* _window;
     Paddle* _paddle;
-    Ball* _ball;
+    std::vector<Ball*> _balls;
     BrickManager* _brickManager;
     PowerupManager* _powerupManager;
     MessagingSystem* _messagingSystem;

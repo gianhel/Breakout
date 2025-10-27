@@ -1,10 +1,10 @@
+#include "PowerupManager.h"
 #include "GameManager.h"
 #include "Ball.h"
-#include "PowerupManager.h"
 #include <iostream>
 
 GameManager::GameManager(sf::RenderWindow* window)
-    : _window(window), _paddle(nullptr), _ball(nullptr), _brickManager(nullptr), _powerupManager(nullptr),
+    : _window(window), _paddle(nullptr), _balls(), _brickManager(nullptr), _powerupManager(nullptr),
     _messagingSystem(nullptr), _ui(nullptr), _pause(false), _time(0.f), lives(3), _pauseHold(0.f), _levelComplete(false),
     _powerupInEffect({ none,0.f }), _timeLastPowerupSpawned(0.f)
 {
@@ -20,8 +20,8 @@ void GameManager::initialize()
     _paddle = new Paddle(_window);
     _brickManager = new BrickManager(_window, this);
     _messagingSystem = new MessagingSystem(_window);
-    _ball = new Ball(_window, 400.0f, this); 
-    _powerupManager = new PowerupManager(_window, _paddle, _ball);
+    _balls.push_back(new Ball(_window, 400.0f, this));
+    _powerupManager = new PowerupManager(_window, _paddle, _balls.at(0), this);
     _ui = new UI(_window, lives, this);
 
     // Create bricks
@@ -33,7 +33,12 @@ void GameManager::update(float dt)
     _powerupInEffect = _powerupManager->getPowerupInEffect();
     _ui->updatePowerupText(_powerupInEffect);
     _powerupInEffect.second -= dt;
-    
+
+    if(_multiballTimer.getElapsedTime().asSeconds() > 5.f && _multiballsActive)
+    {
+        _balls.erase(_balls.begin() + 1);
+        _multiballsActive = false;
+    }
 
     if (lives <= 0)
     {
@@ -83,9 +88,20 @@ void GameManager::update(float dt)
 
     // update everything 
     _paddle->update(dt);
-    _ball->update(dt);
+    for(int i = 0; i < _balls.size(); i++)
+    {
+        _balls.at(i)->update(dt);
+    }
     _powerupManager->update(dt);
 }
+
+void GameManager::spawnMultiballs()
+{
+    _balls.push_back(new Ball(_window, 300.0f, this));
+    _multiballTimer.restart();
+    _multiballsActive = true;
+}
+
 
 void GameManager::loseLife()
 {
@@ -98,7 +114,10 @@ void GameManager::loseLife()
 void GameManager::render()
 {
     _paddle->render();
-    _ball->render();
+    for(int i = 0; i < _balls.size(); i++)
+    {
+        _balls.at(i)->render();
+    }
     _brickManager->render();
     _powerupManager->render();
     _window->draw(_masterText);
