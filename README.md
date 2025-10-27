@@ -33,3 +33,6 @@ fire ball (green)
 
 # Time Details and Changelist
 <Add information to this section about the time you've taken for this task along with a professional changelist.>
+
+0:01 : Began read through of code and fixing of compiler errors
+3:17 : Fixed compiler errors, starting implementation of progress bar for powerups
