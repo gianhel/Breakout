@@ -26,13 +26,13 @@ public:
     sf::RenderWindow* getWindow() const;
     UI* getUI() const;
 
+    int lives;
 
 private:
     bool _pause;
     float _pauseHold;
     float _time;
     float _timeLastPowerupSpawned;
-    int _lives;
     bool _levelComplete;
     std::pair<POWERUPS, float> _powerupInEffect;
 
