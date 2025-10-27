@@ -22,6 +22,7 @@ UI::UI(sf::RenderWindow* window, int lives, GameManager* gameManager)
 	_powerupText.setFillColor(sf::Color::Cyan);
 	_font.loadFromFile("font/montS.ttf");
 	_powerupText.setFont(_font);
+	powerUpBarInit();
 }
 
 UI::~UI()
@@ -72,9 +73,24 @@ void UI::lifeLost(int lives)
 	_lives[_lives.size() - 1 - lives].setFillColor(sf::Color::Transparent);
 }
 
+void UI::powerUpBarInit()
+{
+	_powerupBarBG.setSize(sf::Vector2f(200.f, 40.f));
+	_powerupBarBG.setFillColor(sf::Color::White);
+	_powerupBarBG.setPosition(700.f, 30.f);
+
+	_powerupBar.setSize(sf::Vector2f(190.f, 30.f));
+	_powerupBar.setFillColor(sf::Color::Red);
+	_powerupBar.setPosition(_powerupBarBG.getPosition() + sf::Vector2f(5.f, 5.f));
+	
+}
+
+
 void UI::render()
 {
 	_window->draw(_powerupText);
+	_window->draw(_powerupBarBG);
+	_window->draw(_powerupBar);
 	for (sf::CircleShape life : _lives)
 	{
 		_window->draw(life);
