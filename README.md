@@ -36,3 +36,7 @@ fire ball (green)
 
 0:01 : Began read through of code and fixing of compiler errors
 3:17 : Fixed compiler errors, starting implementation of progress bar for powerups
+11:44 : Created UI and placed it in the top right corner, began research on how to implement progress bars in SFML
+14:58 : Began coding logic for progress bar
+36:19 : Finished implementing progress bar
+49:26 : Finished polish and bug-fixing
